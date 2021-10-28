@@ -12,8 +12,7 @@ public class Hangman {
 
 
         Engine.startMessage();
-        //Engine.amountOfWordsToChose();
-        Engine.chooseDifficulty();
+        Engine.buildWordArray();
         Engine.getWord();
         AsciiHangman.drawAscii();
         Engine.createHiddenWord();

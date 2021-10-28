@@ -13,19 +13,38 @@ public class Engine {
     static ArrayList<Character> word = new ArrayList<Character>();
     static ArrayList<Character> hiddenword = new ArrayList<Character>();
     static ArrayList<Character> guessedLetters = new ArrayList<Character>();
+    static ArrayList<String> wordLists = new ArrayList<String>();
     static int lives = 6;
     static char currentChosenLetter;
-    static int chosenDifficulty;
-    static File Hangman = new File("Resources/Hangman.csv");
+    static String chosenDifficulty;
+    static File HangmanEasy = new File("Resources/HangmanEasy.csv");
+    static File HangmanNormal = new File("Resources/HangmanNormal.csv");
+    static File HangmanHard = new File("Resources/HangmanHard.csv");
     static Scanner scaninput = new Scanner(System.in);
-    static Scanner scannerHangman;
-    static int countOfEasyWords;
-    static int amountOfNormalWords;
-    static int amountOfHardWords;
+    static Scanner scannerHangmanEasy;
+    static Scanner scannerHangmanNormal;
+    static Scanner scannerHangmanHard;
+
 
     static {
         try {
-            scannerHangman = new Scanner(Hangman);
+            scannerHangmanEasy = new Scanner(HangmanEasy);
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        }
+    }
+
+    static {
+        try {
+            scannerHangmanNormal = new Scanner(HangmanNormal);
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        }
+    }
+
+    static {
+        try {
+            scannerHangmanHard = new Scanner(HangmanHard);
         } catch (FileNotFoundException e) {
             e.printStackTrace();
         }
@@ -35,56 +54,39 @@ public class Engine {
         System.out.println("Welcome to Hangman");
     }
 
-    public static int amountOfWordsToChose() {
-        //lave en arraylist for alle ord i en difficulty, ændr getword method til rand index in array (.get(rand))
-        // på den måde vil du kunne tilføje flere rod til listen uden det påvirker programmets flow, da ordene er fordelt mellem ---difficulty---
-        // på den måde slipper du også for magicnumbers in bounds værdierne og en pænere opsætning
-
-        while(scannerHangman.hasNextLine()) {
-            if (scannerHangman.nextLine().equals("---Easy---")) {
-                while(!scannerHangman.nextLine().equals("---Normal---")){
-                    scannerHangman.nextLine();
-                    countOfEasyWords++;
-                }
-
-                while(!scannerHangman.nextLine().equals("---Hard---")){
-                    scannerHangman.nextLine();
-                    amountOfNormalWords++;
-                }
-
-                while(scannerHangman.hasNextLine()){
-                    scannerHangman.nextLine();
-                    amountOfHardWords++;
-                }
-            }
-        }
-        return countOfEasyWords + amountOfNormalWords + amountOfHardWords;
-    }
-
-    public static int chooseDifficulty() {
+    public static ArrayList<String> buildWordArray() {
         System.out.println("Choose difficulty\nType:\n 1 - Easy\n 2 - Normal\n 3 - Hard");
-        chosenDifficulty = scaninput.nextInt();
-        scaninput.nextLine();
-        return chosenDifficulty;
-    }
-// +1 pga ---easy--- +2 pga ---normal---
-    public static ArrayList getWord() {
-        int wordNum = 0;
-        Random random = new Random();
-        if (chosenDifficulty == 1) {
-            wordNum = random.nextInt(countOfEasyWords) + 2;
-        } else if (chosenDifficulty == 2) {
-            wordNum = random.nextInt(countOfEasyWords+amountOfNormalWords+2) + 4;
-        } else if (chosenDifficulty == 3) {
-            wordNum = random.nextInt(countOfEasyWords + amountOfNormalWords + amountOfHardWords+3) + 19;
-        }
-        for (int i = 0; i < wordNum; i++) {
-            scannerHangman.nextLine();
-        }
-        String wordToGuess = scannerHangman.nextLine().toUpperCase();
+        chosenDifficulty = scaninput.nextLine();
+        switch (chosenDifficulty) {
+            case "1":
+                while (scannerHangmanEasy.hasNext()) {
+                    wordLists.add(scannerHangmanEasy.nextLine());
+                }
+                break;
 
+            case "2":
+                while (scannerHangmanNormal.hasNext()) {
+                    wordLists.add(scannerHangmanNormal.nextLine());
+                }
+                break;
+            case "3":
+                while (scannerHangmanHard.hasNext()) {
+                    wordLists.add(scannerHangmanHard.nextLine());
+                }
+                break;
+            default:
+                System.out.println("No words available");
+        }
+        return wordLists;
+    }
+
+    // +1 pga ---easy--- +2 pga ---normal---
+    public static ArrayList getWord() {
+        Random random = new Random();
+        String wordToGuess;
+        wordToGuess = wordLists.get(random.nextInt(wordLists.size()) + 1);
         for (int i = 0; i < wordToGuess.length(); i++) {
-            word.add(wordToGuess.charAt(i));
+            word.add(wordToGuess.toUpperCase().charAt(i));
         }
         return word;
     }
@@ -123,15 +125,16 @@ public class Engine {
 
     public static char userChosenLetter() {
         System.out.println("Type in a letter");
-        currentChosenLetter  = scaninput.nextLine().toUpperCase().charAt(0);
+        currentChosenLetter = scaninput.nextLine().toUpperCase().charAt(0);
         return currentChosenLetter;
     }
 
-    public static ArrayList addToListOfGuessedLetters(){
+    public static ArrayList addToListOfGuessedLetters() {
         guessedLetters.add(currentChosenLetter);
         return guessedLetters;
     }
-    public static void printListOfGuessedLetters(){
+
+    public static void printListOfGuessedLetters() {
         System.out.println("You have guessed: " + guessedLetters);
     }
 
