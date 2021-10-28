@@ -25,7 +25,6 @@ public class Engine {
     static Scanner scannerHangmanNormal;
     static Scanner scannerHangmanHard;
 
-
     static {
         try {
             scannerHangmanEasy = new Scanner(HangmanEasy);
