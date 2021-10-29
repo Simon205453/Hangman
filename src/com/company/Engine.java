@@ -79,7 +79,6 @@ public class Engine {
         return wordLists;
     }
 
-    // +1 pga ---easy--- +2 pga ---normal---
     public static ArrayList getWord() {
         Random random = new Random();
         String wordToGuess;

@@ -1,9 +1,5 @@
 package com.company;
 
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.util.Scanner;
-
 import static com.company.Engine.*;
 
 public class Hangman {
