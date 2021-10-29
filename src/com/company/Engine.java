@@ -8,8 +8,6 @@ import java.util.Scanner;
 
 public class Engine {
 
-    // if hard is chosen fori = i = 3, if easy is chosen fori = i = 1
-    // takes the easy first word or the hard 3rd word.
     static ArrayList<Character> word = new ArrayList<Character>();
     static ArrayList<Character> hiddenword = new ArrayList<Character>();
     static ArrayList<Character> guessedLetters = new ArrayList<Character>();
@@ -78,7 +76,6 @@ public class Engine {
         }
         return wordLists;
     }
-
     public static ArrayList getWord() {
         Random random = new Random();
         String wordToGuess;
